@@ -1,6 +1,7 @@
 # Press-Stitch in java
 
-Rewritten https://github.com/marianalatynina/press-stitch in java. Way faster than python version
+Rewritten https://github.com/marianalatynina/press-stitch in java. Way faster than python version.
+
 Release are done on github due to a less convoluted system.
 
 # Content below taken and edit from https://github.com/marianalatynina/press-stitch
