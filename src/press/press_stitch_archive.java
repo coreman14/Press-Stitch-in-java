@@ -26,7 +26,7 @@ public class press_stitch_archive {
 		}
 		String path = System.getProperty("user.dir");
 		File file = new File(path+"/rpatool.exe");
-		InputStream rpatool = press_stitch_archive.class.getResourceAsStream("../rpatool.exe");
+		InputStream rpatool = press_stitch_archive.class.getResourceAsStream("rpatool.exe");
 		try (FileOutputStream outputStream = new FileOutputStream(file, false)) {
             int read;
             byte[] bytes = new byte[8192];
