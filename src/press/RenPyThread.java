@@ -12,8 +12,12 @@ public class RenPyThread {
 		vars = v;
 		stack = s;
 	}
-	
-	public boolean equals(RenPyThread o) {
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof RenPyThread)) {
+			return false;
+		}
+		RenPyThread o = (RenPyThread) obj;
 		return (this.vars.equals(o.vars) && this.stack.equals(o.stack));
 	}
 	public RenPyThread clone() {
