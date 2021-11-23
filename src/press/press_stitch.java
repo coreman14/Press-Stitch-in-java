@@ -883,7 +883,7 @@ public class press_stitch {
 			// Process label calls
 			while (labelCalls.size() > 0) {
 				RenPyLabelCall labelCall = labelCalls.remove(labelCalls.size() - 1);
-				if (!labelCalls.contains(labelCall)) {
+				if (!labelCalls.contains(labelCall)) { //Turns out if your write the equals correctly it works
 					processLabelCall(rpFile, labelCall.label, labelCall.vars);
 				} else {
 					print("Ignoring duplicate call");
@@ -893,9 +893,6 @@ public class press_stitch {
 			// Process threads
 			print("Paths: " + threads.size());
 			while (threads.size() > 0) {
-				if (numThreads == 1047) {
-					System.out.print("");
-				}
 				processNextThread(rpFile);
 				numThreads += 1;
 				if ((threads.size() % 10) == 0) {
@@ -1017,7 +1014,6 @@ public class press_stitch {
 			RenPyFile cielPath = new RenPyFile("C", backgrounds_map.backgroundMap35,
 					characterImages.characterImageMap35, v6map);
 			cielPath.readFile(Paths.get(extPath5, "Story", "Cielpath.rpy").toString());
-
 			// Search for labels
 			cielPath.findLabels();
 

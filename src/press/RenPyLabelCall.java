@@ -17,7 +17,13 @@ public class RenPyLabelCall {
 		// TODO Auto-generated method stub
 		return label + ", " + vars.toString();
 	}
-	public boolean equals(RenPyLabelCall o) {
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof RenPyLabelCall)) {
+			return false;
+		}
+		RenPyLabelCall o = (RenPyLabelCall) obj;
 		return (this.vars.equals(o.vars) && this.label.equals(o.label));
 	}
 }
