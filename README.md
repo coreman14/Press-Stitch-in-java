@@ -1,10 +1,10 @@
 # Press-Stitch in java
 
-Rewritten https://github.com/marianalatynina/press-stitch in java. Way faster than python version.
+Rewritten  from [python](https://github.com/marianalatynina/press-stitch) to java. Unzipping is slower but rewriting the file is actually faster.
 
-Release are done on github due to a less convoluted system.
+Release are done on [github](https://github.com/coreman14/Press-Stitch-in-java/releases).
 
-# Content below taken and edit from https://github.com/marianalatynina/press-stitch
+# Content below taken and edited from https://github.com/marianalatynina/press-stitch
 
 # About
 _Press Stitch_ is a set of Python scripts for the Press Switch visual novels by Skeigh. The scripts will stitch together content from earlier versions of the game to create one single game with paths from multiple versions.
@@ -35,14 +35,14 @@ The scripts are developed and tested primarily on Linux, but they should work eq
 
 # Download and Installation
 
-## Windows
+## Windows (Edited for java)
 1. There are 2 option, Java jar or EXE. If you don't have Java installed, download the EXE from the main repository.
-2. Place it somewhere, this should create a folder called `press-stitch-main`.
-3. Download the `Press-SwitchV0.5c-pc.zip` file from [TFGames](https://tfgames.site/index.php?module=viewgame&id=282) and put it in the `press-stitch-main` folder.
-4. In the `press-stitch-main` folder, double-click the `Press-stitch.exe` script or run `java -jar PressJar.jar`, and you should see it start to run in a command window. It will print lots of numbers and statistics as it runs, this is normal and you can ignore this. _PLEASE NOTE!_ This may take a while, but it will complete it faster than python.
+2. Place it in a folder.
+3. Download the `Press-SwitchV0.5c-pc.zip` file from [TFGames](https://tfgames.site/index.php?module=viewgame&id=282) and put it in the same folder as the jar/exe.
+4. In the folder, double-click the `Press-stitch.exe` script or run `java -jar PressJar.jar`, and you should see it start to run in a command window. It will print lots of numbers and statistics as it runs, this is normal and you can ignore this. _PLEASE NOTE!_ This may take a while, but it will complete it faster than python.
 5. If everything completes correctly, there will now be a new folder called `Press-SwitchV0.5c-pc` which contains the patched game. Go into there and click on the `Press-Switch` application to play the game.
 
 Note that you only need to do the steps above once! If you want to come back and play the game again, you can just run it like in step 6.
 
 ## Linux
-This probaly isn't compatible with linux as it uses an exe to emulate python for the rpatool. Not sure what format i could throw it into other than python.
+This probaly isn't compatible with linux as it uses an exe to emulate python for the rpatool. Not sure what format I could throw it into other than python.
