@@ -8,9 +8,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
-import java.util.Map.Entry;
-import java.util.Scanner;
-
 import org.apache.commons.io.FileUtils;
 
 public class press_stitch {
@@ -257,7 +254,7 @@ public class press_stitch {
 	public void unzipFile(String filename) {
 		print("Unzipping file " + filename + "...");
 		try {
-			UnzipFile.unzipfile(filename, ".");
+			UnzipFile.unzipfile(filename);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -912,8 +909,9 @@ public class press_stitch {
 		characterImages.fill_characterImages();
 	}
 
+	@SuppressWarnings("unchecked")
 	public void main(String[] args) {
-		press_stitch_archive.extractRPATool();
+//		press_stitch_archive.extractRPATool(); // Decouple
 		boolean doClean = false;
 		boolean doEliza = true;
 		boolean doCiel = true;
@@ -976,6 +974,9 @@ public class press_stitch {
 		}
 		if (!checkFile(filename_05, "6a4f9dac386e2fae1bce00e0157ee8b1")) {
 			System.exit(1);
+		}
+		if (have4 || have3) {
+			//This will do something eventually
 		}
 		press_stitch_archive.unpackArchive(filename_05);
 		String extPath5 = Paths.get("Extracted", filename_05).toString();

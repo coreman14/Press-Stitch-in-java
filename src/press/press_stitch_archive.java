@@ -3,6 +3,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 /**
  * CHANGES FROM PYTHON VERSION
@@ -20,13 +22,13 @@ public class press_stitch_archive {
 	public static boolean extractedTool = false;
 	
 	
-	public static void extractRPATool() {
+	public static void extractRPATool(String toolName) {
 		if (extractedTool) {
 			return;
 		}
 		String path = System.getProperty("user.dir");
-		File file = new File(path+"/rpatool.exe");
-		InputStream rpatool = press_stitch_archive.class.getResourceAsStream("rpatool.exe");
+		File file = new File(path+"/" + toolName);
+		InputStream rpatool = press_stitch_archive.class.getResourceAsStream(toolName);
 		try (FileOutputStream outputStream = new FileOutputStream(file, false)) {
             int read;
             byte[] bytes = new byte[8192];
@@ -40,6 +42,27 @@ public class press_stitch_archive {
 		file.deleteOnExit();
 		extractedTool = true;
 	}
+	
+	
+	
+	public static void runRPAEXE(String rpaFilename,File output) throws IOException, InterruptedException {
+		Process p = Runtime.getRuntime().exec("rpatool.exe -x \"" + rpaFilename + "\" -o \"" + output.getAbsolutePath() + "\"" );
+		p.waitFor();
+	}
+	
+	private static void runRPAPy(String rpaFilename, File output) throws IOException, InterruptedException { //Run rpatool with python
+		try {
+			Process p = Runtime.getRuntime().exec("python rpatool.py -x \"" + rpaFilename + "\" -o \"" + output.getAbsolutePath() + "\"" );
+			p.waitFor();
+		}
+		catch (IOException | InterruptedException e) { //If fails try with python3
+			Process p = Runtime.getRuntime().exec("python3 rpatool.py -x \"" + rpaFilename + "\" -o \"" + output.getAbsolutePath() + "\"" );
+			p.waitFor();
+		}
+
+		
+	}
+	
 	public static void extractRPAFile(String rpaFilename,File output) {
 		System.out.println("Extracting RPA file " + rpaFilename + " to " + output);
 		//Place exe in temp dir to use
@@ -48,8 +71,15 @@ public class press_stitch_archive {
 			output.mkdirs();
 		}
 		try {
-			Process p = Runtime.getRuntime().exec("rpatool.exe -x \"" + rpaFilename + "\" -o \"" + output.getAbsolutePath() + "\"" );
-			p.waitFor();
+			String OS = System.getProperty("os.name").toLowerCase();
+			if (OS.indexOf("win") >= 0) {
+				extractRPATool("rpatool.exe");
+				runRPAEXE(rpaFilename, output);
+			}
+			else if (OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0 || OS.indexOf("mac") >= 0) {
+				extractRPATool("rpatool.py");
+				runRPAPy(rpaFilename, output);
+			}
 		} catch (IOException | InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -57,6 +87,12 @@ public class press_stitch_archive {
 		
 		
 	}
+
+
+
+
+
+
 	//This runs after file has been extracted
 	public static void unpackArchive(String folder) { //Folder is the folder we are checking in extracted
 		String folderArchive = Paths.get(cwd, folder, "Game").toString() + "\\";
@@ -66,7 +102,7 @@ public class press_stitch_archive {
 	        System.out.println("Extracted data folder " + destinationFolder + " exists, skipping RPA extract");
 	        return;
 	    }
-	    System.out.println("Extracting " + folder + ", please wait...");
+	    System.out.println("Extracting rpas from " + folder + ", please wait...");
 	    extractRPAFile(folderArchive + fileNameArchive, destinationFolder);
 	    if (!folder.equals(destinationFolder + ".3b-all")) {
 	        extractRPAFile(folderArchive + fileNameScripts, destinationFolder);}
@@ -94,9 +130,18 @@ public class press_stitch_archive {
 	    }
 	    for (String ver: folderVersion) {
 	        File extractFolder = new File(Paths.get(folderExtracted, folderName + ver).toString());
-	        
-	        System.out.println(folderName + ver);
-	        if (!extractFolder.exists()) { //
+	        File UnZippedGame = new File(Paths.get(folderName + ver).toString());
+	        if (!UnZippedGame.exists()){
+	        	try {
+					if (Files.list(Path.of(cwd)).anyMatch((path) -> path.toString().contains(folderName + ver))) {
+						System.out.println("Extracting " + folderName + ver + ".zip to " + folderName + ver);
+						UnzipFile.unzipfile(folderName + ver + ".zip");
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+	        }
+	        if (!extractFolder.exists()) { 
 	            unpackArchive(folderName + ver);
 	        }
 	        else {
@@ -105,9 +150,6 @@ public class press_stitch_archive {
 	    }
     }
 	public static void main(String[] args) {
-//		extractRPAFile("", null);
-		//Press-SwitchV0.5c-pc
-		extractRPATool();
 	    extractAllRPAFiles();
 	}
 }
