@@ -28,6 +28,11 @@ public class press_stitch_archive {
 		}
 		String path = System.getProperty("user.dir");
 		File file = new File(path+"/" + toolName);
+		if (file.exists()) {
+			System.out.println(toolName  +" already exsist's. Skipping extract.");
+			extractedTool = true;
+			return;
+		}
 		InputStream rpatool = press_stitch_archive.class.getResourceAsStream(toolName);
 		try (FileOutputStream outputStream = new FileOutputStream(file, false)) {
             int read;
@@ -66,23 +71,28 @@ public class press_stitch_archive {
 	public static void extractRPAFile(String rpaFilename,File output) {
 		System.out.println("Extracting RPA file " + rpaFilename + " to " + output);
 		//Place exe in temp dir to use
-		
+		String toolName = "";
 		if (!output.exists()) {
 			output.mkdirs();
 		}
 		try {
 			String OS = System.getProperty("os.name").toLowerCase();
 			if (OS.indexOf("win") >= 0) {
+				toolName = "rpatool.exe";
 				extractRPATool("rpatool.exe");
 				runRPAEXE(rpaFilename, output);
 			}
 			else if (OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0 || OS.indexOf("mac") >= 0) {
+				toolName = "rpatool.py";
 				extractRPATool("rpatool.py");
 				runRPAPy(rpaFilename, output);
 			}
 		} catch (IOException | InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			if (toolName.equals("rpatool.py"))
+				System.out.println("Error: Could not run python file. Make sure python is installed. Try's python then python3.");
+			else if(toolName.equals("rpatool.exe")) {
+				System.out.println("Error: Could not run exe. If environment is not windows, contact developer.");
+			}
 		}
 		
 		
