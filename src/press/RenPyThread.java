@@ -1,14 +1,14 @@
 package press;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 
 
 
 public class RenPyThread {
-	public LinkedHashMap<String, String> vars;
+	public HashMap<String, String> vars;
 	public ArrayList<RenPyObject> stack;
-	public RenPyThread(LinkedHashMap<String, String> v, ArrayList<RenPyObject> s) {
+	public RenPyThread(HashMap<String, String> v, ArrayList<RenPyObject> s) {
 		vars = v;
 		stack = s;
 	}
@@ -21,7 +21,7 @@ public class RenPyThread {
 	}
 	public RenPyThread clone() {
 		ArrayList<RenPyObject> clonestack = new ArrayList<>();
-		LinkedHashMap<String, String> clonevars = new LinkedHashMap<>(vars);
+		HashMap<String, String> clonevars = new HashMap<>(vars);
 		for (RenPyObject s: stack) {
 			clonestack.add(s.clone());
 				

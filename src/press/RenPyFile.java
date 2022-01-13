@@ -8,7 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 
 public class RenPyFile {
 	public static String[] trimStringByStringArray(String text) {
@@ -41,34 +41,34 @@ public class RenPyFile {
 	public String type;
 	public ArrayList<String> lines;
 	public int numLines;
-	public LinkedHashMap<String, Integer> labelList;
-	public LinkedHashMap<String, String> backMap;
-	public LinkedHashMap<String, LinkedHashMap<String, String>> charMap;
-	public LinkedHashMap<String, LinkedHashMap<String, String>> v6Map;
+	public HashMap<String, Integer> labelList;
+	public HashMap<String, String> backMap;
+	public HashMap<String, HashMap<String, String>> charMap;
+	public HashMap<String, HashMap<String, String>> v6Map;
 	public ArrayList<String> charFlip;
 	public ArrayList<Integer> visLines;
 	public ArrayList<Integer> showLines;
 	public boolean trackVis;
-	public LinkedHashMap<Integer, Boolean> lineModifiedFlags;
+	public HashMap<Integer, Boolean> lineModifiedFlags;
 	public RenPyFile() {
 	    lines = new ArrayList<>();
 	    numLines  = 0;
-	    labelList = new LinkedHashMap<>();
-	    backMap   = new LinkedHashMap<>();
-	    charMap   = new LinkedHashMap<>();
-	    v6Map     = new LinkedHashMap<>();
+	    labelList = new HashMap<>();
+	    backMap   = new HashMap<>();
+	    charMap   = new HashMap<>();
+	    v6Map     = new HashMap<>();
 	    charFlip  = new ArrayList<>();
 	    visLines  = new ArrayList<>();
 	    showLines = new ArrayList<>();
 	    trackVis  = false;
-	    lineModifiedFlags = new LinkedHashMap<>();
+	    lineModifiedFlags = new HashMap<>();
 	    type = "Z";	
 	    }
 
 	public RenPyFile( String type,
-			LinkedHashMap<String, String> b,
-			LinkedHashMap<String, LinkedHashMap<String, String>> c,
-			LinkedHashMap<String, LinkedHashMap<String, String>> v6
+			HashMap<String, String> b,
+			HashMap<String, HashMap<String, String>> c,
+			HashMap<String, HashMap<String, String>> v6
 			) {
 		this();
 		if (type.equals("C") || type.equals("G")) {

@@ -7,7 +7,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Collections;
 import org.apache.commons.io.FileUtils;
 
 public class press_stitch {
@@ -15,12 +17,12 @@ public class press_stitch {
 	public String filename_04 = "Press-SwitchV0.4a-pc";
 	public String filename_05 = "Press-SwitchV0.5c-pc";
 	public String filename_06 = "Press-SwitchV0.6";
-	public LinkedHashMap<String, String> characterLabelMap = new LinkedHashMap<>();
-	public LinkedHashMap<String, Boolean> characterDoRemap = new LinkedHashMap<>();
-	public LinkedHashMap<String, String> pyVariables = new LinkedHashMap<>();
-	public LinkedHashMap<String, String> personDispVars = new LinkedHashMap<>();
+	public HashMap<String, String> characterLabelMap = new HashMap<>();
+	public HashMap<String, Boolean> characterDoRemap = new HashMap<>();
+	public HashMap<String, String> pyVariables = new HashMap<>();
+	public HashMap<String, String> personDispVars = new HashMap<>();
 	public boolean inlineErrors = false;
-	public ArrayList<RenPyThread> threads = new ArrayList<>();
+	public List<RenPyThread> threads = Collections.synchronizedList(new ArrayList<>());
 	public ArrayList<RenPyLabelCall> labelCalls = new ArrayList<>();
 
 	public void fillvars() {
@@ -178,6 +180,15 @@ public class press_stitch {
 		personDispVars.put("vanessa", "v.display");
 	}
 
+	public RenPyThread getThread() {
+		synchronized (threads) {
+			if (threads.size() > 0)
+				return threads.remove(threads.size() -1);
+			return null;
+		}
+		
+	}
+	
 	public static void print(String s) {
 		System.out.println(s);
 	}
@@ -512,10 +523,13 @@ public class press_stitch {
 					}
 				}
 			}
-			if (!rpFile.lineModifiedFlags.get(i)) {
-				rpFile.lines.set(i, processShow(rpFile, thread, i));
-				rpFile.lineModifiedFlags.put(i, true);
+			synchronized (rpFile.lineModifiedFlags) {
+				if (!rpFile.lineModifiedFlags.get(i)) {
+					rpFile.lines.set(i, processShow(rpFile, thread, i));
+					rpFile.lineModifiedFlags.put(i, true);
+				}
 			}
+
 			i = i + 1;
 		} else if (strippedLine.startsWith("$")) {
 			processCommand(rpFile, thread, i, RenPyFile.trimStringByString(strippedLine, "$").strip());
@@ -804,10 +818,8 @@ public class press_stitch {
 	}
 	// -----------------------------------------------------------------------------
 
-	public void processNextThread(RenPyFile rpFile) {
-		RenPyThread thread = threads.remove(threads.size() - 1);
-
-		while (thread.stack.size() > 0) {
+	public void processNextThread(RenPyFile rpFile, RenPyThread thread) {
+		while (thread != null && thread.stack.size() > 0) {
 			RenPyObject obj = thread.stack.get(thread.stack.size() - 1);
 			if (obj.objType.equals("Block")) {
 				processBlockStep(rpFile, thread);
@@ -826,12 +838,12 @@ public class press_stitch {
 		if (!rpFile.labelIsAcceptable(l)) {
 			return;
 		}
-		LinkedHashMap<String, String> k = (LinkedHashMap<String, String>) thread.vars.clone();
+		HashMap<String, String> k = (HashMap<String, String>) thread.vars.clone();
 		labelCalls.add(new RenPyLabelCall(l, k));
 	}
 
 //	//-----------------------------------------------------------------------------
-	public void processLabelCall(RenPyFile rpFile, String l, LinkedHashMap<String, String> v) {
+	public void processLabelCall(RenPyFile rpFile, String l, HashMap<String, String> v) {
 
 		int lineNum = rpFile.labelList.get(l) + 1;
 		String line = rpFile.lines.get(lineNum);
@@ -849,6 +861,7 @@ public class press_stitch {
 		int iterations = 1;
 		int duplicates = 0;
 		int numThreads = 0;
+		final int max_threads = Runtime.getRuntime().availableProcessors()/2;
 		while (labelCalls.size() > 0 || (threads.size() > 0)) {
 			print("---------- Depth " + iterations + " ----------");
 			print("Label calls: " + labelCalls.size());
@@ -864,14 +877,23 @@ public class press_stitch {
 			}
 			// Process threads
 			print("Paths: " + threads.size());
+			ThreadGroup t = new ThreadGroup("Group 1");
 			while (threads.size() > 0) {
-				processNextThread(rpFile);
+				Thread t1 = new Thread(t, () -> processNextThread(rpFile, getThread()));
+				t1.start();
 				numThreads += 1;
 				if ((threads.size() % 10) == 0) {
 					print("[Depth " + iterations + "] Paths: " + duplicates + " dupe, " + numThreads + " total, "
 							+ threads.size() + " left this depth");
 				}
+				while(t.activeCount() >= max_threads) {try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}}
 			}
+			while(t.activeCount() != 0) {}
 			iterations += 1;
 		}
 	}
@@ -886,6 +908,7 @@ public class press_stitch {
 
 	@SuppressWarnings("unchecked")
 	public void main(String[] args) {
+		long startTime = System.nanoTime();
 //		press_stitch_archive.extractRPATool(); // Decouple
 		boolean doClean = false;
 		boolean doEliza = true;
@@ -894,6 +917,7 @@ public class press_stitch {
 		boolean doScan = true;
 		boolean doV6 = false;
 		boolean verbose = false;
+		boolean threadClean = false;
 
 		if (args.length > 0) {
 			for (String arg : args) {
@@ -905,6 +929,7 @@ public class press_stitch {
 					case "--nogoopy" -> doGoopy = false;
 					case "--noscan" -> doScan = false;
 					case "--verbose", "-v" -> verbose = true;
+					case "--threadclean" -> threadClean = true;
 					case "--v6" -> {
 						doV6 = true;
 						doCiel = false; // Cielpath disabled for 0.6
@@ -922,6 +947,10 @@ public class press_stitch {
 			removeDir(filename_05);
 			removeDir("Extracted");
 			System.exit(0);
+		}
+		if (threadClean) {
+			removeDir(Paths.get(filename_05, "Game", "Story").toString());
+			new File(Paths.get(filename_05, "Game", "Story").toString()).mkdirs();
 		}
 		
 		// Normal run
@@ -952,7 +981,7 @@ public class press_stitch {
 		press_stitch_archive.unpackArchive(filename_05);
 		String extPath5 = Paths.get("Extracted", filename_05).toString();
 		String dstPath = Paths.get(filename_05, "game").toString();
-		LinkedHashMap<String, LinkedHashMap<String, String>> v6map = new LinkedHashMap<>();
+		HashMap<String, HashMap<String, String>> v6map = new HashMap<>();
 
 		if (doV6) {
 			v6map = characterImages.characterImageMap56;
@@ -974,7 +1003,7 @@ public class press_stitch {
 			dayzero.findLabels();
 			dayzero.findShows();
 			addLabelCall(dayzero, "GameStart",
-					new RenPyThread((LinkedHashMap<String, String>) pyVariables.clone(), new ArrayList<>()));
+					new RenPyThread((HashMap<String, String>) pyVariables.clone(), new ArrayList<>()));
 			iterateLabelCalls(dayzero);
 		}
 
@@ -994,7 +1023,7 @@ public class press_stitch {
 
 			// Process the 'leftit' label, it's the toplevel.
 			addLabelCall(cielPath, "leftit",
-					new RenPyThread(new LinkedHashMap<>(), new ArrayList<>()));
+					new RenPyThread(new HashMap<>(), new ArrayList<>()));
 			iterateLabelCalls(cielPath);
 
 			// Flip the affected V3 characters
@@ -1021,10 +1050,10 @@ public class press_stitch {
 				// Process the 'eliza' label, it's the toplevel.
 				// We need two calls, one for the timer < 34 and one for > 30
 				pyVariables.put("timer_value", "0"); // Less than 30
-				addLabelCall(elizaPath, "eliza", new RenPyThread((LinkedHashMap<String, String>) pyVariables.clone(),
+				addLabelCall(elizaPath, "eliza", new RenPyThread((HashMap<String, String>) pyVariables.clone(),
 						new ArrayList<>()));
 				pyVariables.put("timer_value", "60"); // Greater than 30
-				addLabelCall(elizaPath, "eliza", new RenPyThread((LinkedHashMap<String, String>) pyVariables.clone(),
+				addLabelCall(elizaPath, "eliza", new RenPyThread((HashMap<String, String>) pyVariables.clone(),
 						new ArrayList<>()));
 				iterateLabelCalls(elizaPath);
 			}
@@ -1053,7 +1082,7 @@ public class press_stitch {
 
 			// Process the path
 			addLabelCall(goopyPath, "elizagoopypath",
-					new RenPyThread(new LinkedHashMap<>(), new ArrayList<>()));
+					new RenPyThread(new HashMap<>(), new ArrayList<>()));
 			iterateLabelCalls(goopyPath);
 
 			// Flip the affected V3 characters
@@ -1076,6 +1105,8 @@ public class press_stitch {
 
 		// -----------------------------------------------------------------------------
 		// Hook to call main
+		System.out.println(System.nanoTime() - startTime);
+
 		System.out.print("Completed Stitching, Press any key to exit: ");
 		try {
 			System.in.readNBytes(1);

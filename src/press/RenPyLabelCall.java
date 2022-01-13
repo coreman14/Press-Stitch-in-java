@@ -1,12 +1,12 @@
 package press;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 
 public class RenPyLabelCall {
 	String label;
-	LinkedHashMap<String, String> vars;
+	HashMap<String, String> vars;
 	public RenPyLabelCall(
 			String l,
-			LinkedHashMap<String, String> v			
+			HashMap<String, String> v			
 			) {
 		label = l;
 		vars = v;
