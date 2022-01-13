@@ -251,10 +251,10 @@ public class press_stitch {
 	}
 
 	// -----------------------------------------------------------------------------
-	public void unzipFile(String filename) {
+	public void unzipFile(String filename, boolean verbose) {
 		print("Unzipping file " + filename + "...");
 		try {
-			UnzipFile.unzipfile(filename);
+			UnzipFile.unzipfile(filename, verbose);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -277,7 +277,7 @@ public class press_stitch {
 	}
 
 	// -----------------------------------------------------------------------------
-	public boolean checkFile(String dirname, String checksum) {
+	public boolean checkFile(String dirname, String checksum, boolean verbose) {
 		File checkDir = new File(dirname);
 		if (checkDir.isDirectory()) {
 			print("Directory " + dirname + " exists, ZIP extract skipped");
@@ -287,7 +287,7 @@ public class press_stitch {
 		if (!verifySingleFile(filename, checksum)) {
 			return false;
 		}
-		unzipFile(filename);
+		unzipFile(filename, verbose);
 		return true;
 	}
 
@@ -918,12 +918,13 @@ public class press_stitch {
 		boolean doGoopy = true;
 		boolean doScan = true;
 		boolean doV6 = false;
+		boolean verbose = false;
 		ArrayList<String> argsChecks = new ArrayList<String>(Arrays
-				.asList(new String[] { "clean", "inlineerrors", "nociel", "noeliza", "nogoopy", "noscan", "v6" }));
+				.asList(new String[] { "clean", "inlineerrors", "nociel", "noeliza", "nogoopy", "noscan", "v6", "verbose"}));
 		if (args.length > 0) {
 			for (int j = 0; j < args.length - 1; j++) {
 				if (!argsChecks.contains(args[j])) {
-					showError("Usage is: press-stitch.py [--clean]");
+					showError("Usage is: press-stitch.py [--clean] [--verbose]");
 					System.exit(1);
 				}
 				switch (args[j]) {
@@ -940,6 +941,8 @@ public class press_stitch {
 					doGoopy = false;
 				case "--noscan":
 					doScan = false;
+				case "--verbose":
+					verbose = true;
 				case "--v6":
 					doV6 = true;
 					doCiel = false; // Cielpath disabled for 0.6
@@ -959,20 +962,20 @@ public class press_stitch {
 		boolean have3 = false;
 		boolean have4 = false;
 		if (new File(filename_03 + ".zip").exists()) {
-			if (!checkFile(filename_03, "e01bfc54520e8251bc73c7ee128836e2")) {
+			if (!checkFile(filename_03, "e01bfc54520e8251bc73c7ee128836e2", verbose)) {
 				System.exit(1);
 			}
 			have3 = true;
 			press_stitch_archive.unpackArchive(filename_03);
 		}
 		if (new File(filename_04 + ".zip").exists()) {
-			if (!checkFile(filename_03, "ca7ee44f40f802009a6d49659c8a760d")) {
+			if (!checkFile(filename_03, "ca7ee44f40f802009a6d49659c8a760d", verbose)) {
 				System.exit(1);
 			}
 			have4 = true;
 			press_stitch_archive.unpackArchive(filename_04);
 		}
-		if (!checkFile(filename_05, "6a4f9dac386e2fae1bce00e0157ee8b1")) {
+		if (!checkFile(filename_05, "6a4f9dac386e2fae1bce00e0157ee8b1", verbose)) {
 			System.exit(1);
 		}
 		if (have4 || have3) {
