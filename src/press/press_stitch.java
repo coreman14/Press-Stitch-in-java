@@ -887,6 +887,7 @@ public class press_stitch {
 	@SuppressWarnings("unchecked")
 	public void main(String[] args) {
 //		press_stitch_archive.extractRPATool(); // Decouple
+		long startTime = System.currentTimeMillis();
 		boolean doClean = false;
 		boolean doEliza = true;
 		boolean doCiel = true;
@@ -894,7 +895,9 @@ public class press_stitch {
 		boolean doScan = true;
 		boolean doV6 = false;
 		boolean verbose = false;
-
+		boolean threadclean = false;
+		
+		
 		if (args.length > 0) {
 			for (String arg : args) {
 				switch (arg) {
@@ -905,6 +908,7 @@ public class press_stitch {
 					case "--nogoopy" -> doGoopy = false;
 					case "--noscan" -> doScan = false;
 					case "--verbose", "-v" -> verbose = true;
+					case "--threadclean" -> threadclean = true;
 					case "--v6" -> {
 						doV6 = true;
 						doCiel = false; // Cielpath disabled for 0.6
@@ -1076,6 +1080,7 @@ public class press_stitch {
 
 		// -----------------------------------------------------------------------------
 		// Hook to call main
+		System.out.println(((System.currentTimeMillis() - startTime) /1000.00) );
 		System.out.print("Completed Stitching, Press any key to exit: ");
 		try {
 			System.in.readNBytes(1);
