@@ -593,8 +593,12 @@ public class press_stitch {
 
 	public String processShow(RenPyFile rpFile, RenPyThread thread, int lineNum) {
 		String line = rpFile.lines.get(lineNum);
+		if (line.equals("show karynd with dissolve:")) {
+			System.out.println("UWU");
+		}
+		
 		String[] fields = RenPyFile.trimStringByString(line.strip(), ":").strip().trim().split("\\s+");
-
+		
 		// At this point, 'fields' looks like this:
 		// ['show', 'maind', '17', 'with', 'dissolve']
 
@@ -886,12 +890,7 @@ public class press_stitch {
 					print("[Depth " + iterations + "] Paths: " + duplicates + " dupe, " + numThreads + " total, "
 							+ threads.size() + " left this depth");
 				}
-				while(t.activeCount() >= max_threads) {try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}}
+				while(t.activeCount() == max_threads) {}
 			}
 			while(t.activeCount() != 0) {}
 			iterations += 1;
@@ -1107,13 +1106,13 @@ public class press_stitch {
 		// Hook to call main
 		System.out.println((System.currentTimeMillis() - startTime)/1000.00);
 
-		System.out.print("Completed Stitching, Press any key to exit: ");
-		try {
-			System.in.readNBytes(1);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		System.out.print("Completed Stitching, Press any key to exit: ");
+//		try {
+//			System.in.readNBytes(1);
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 
 }
