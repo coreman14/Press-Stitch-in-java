@@ -43,13 +43,13 @@ public class UnzipFile {
 	 * @param fileZip The zip file to extract
 	 * @param dest The destination of the files
 	 * @param verbose If true, will print out progress
-	 * @throws IOException
+	 * @throws IOException Throws io exception zip_file is not found or a folder cannot be created
 	 */
     public static void unzipfile(String fileZip, String dest, Boolean verbose) throws IOException {
         final File destDir = new File(dest);
         final byte[] buffer = new byte[1024];
         
-        try (final ZipInputStream zis = new ZipInputStream(new FileInputStream(fileZip));) {
+        try (final ZipInputStream zis = new ZipInputStream(new FileInputStream(fileZip))) {
         System.out.println();
         int files_in_zip = zipEntriesCount(fileZip);
         int count = 0;
@@ -85,7 +85,7 @@ public class UnzipFile {
     }
 
     /**
-     * @see https://snyk.io/research/zip-slip-vulnerability
+     * @see <a href="https://snyk.io/research/zip-slip-vulnerability">Zip Slip vulnerability</a>
      */
     public static File newFile(File destinationDir, ZipEntry zipEntry) throws IOException {
         File destFile = new File(destinationDir, zipEntry.getName());

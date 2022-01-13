@@ -1,7 +1,7 @@
 package press;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.Map.Entry;
 
 
 
@@ -14,24 +14,19 @@ public class RenPyThread {
 	}
 	@Override
 	public boolean equals(Object obj) {
-		if(!(obj instanceof RenPyThread)) {
+		if(!(obj instanceof RenPyThread o)) {
 			return false;
 		}
-		RenPyThread o = (RenPyThread) obj;
 		return (this.vars.equals(o.vars) && this.stack.equals(o.stack));
 	}
 	public RenPyThread clone() {
-		LinkedHashMap<String, String> clonevars = new LinkedHashMap<String, String> ();
-		ArrayList<RenPyObject> clonestack = new ArrayList<RenPyObject>();
-		for(Entry<String, String> k: vars.entrySet()) {
-			clonevars.put(k.getKey(), k.getValue());
-		}
+		ArrayList<RenPyObject> clonestack = new ArrayList<>();
+		LinkedHashMap<String, String> clonevars = new LinkedHashMap<>(vars);
 		for (RenPyObject s: stack) {
 			clonestack.add(s.clone());
 				
 		}
-		RenPyThread clone = new RenPyThread(clonevars, clonestack);
-		return clone;
+		return new RenPyThread(clonevars, clonestack);
 		
 	}
 	@Override

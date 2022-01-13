@@ -37,8 +37,10 @@ public class press_stitch_archive {
 		try (FileOutputStream outputStream = new FileOutputStream(file, false)) {
             int read;
             byte[] bytes = new byte[8192];
-            while ((read = rpatool.read(bytes)) != -1) {
-                outputStream.write(bytes, 0, read);
+            while (true) {
+				assert rpatool != null;
+				if ((read = rpatool.read(bytes)) == -1) break;
+				outputStream.write(bytes, 0, read);
             }
         } catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -72,17 +74,15 @@ public class press_stitch_archive {
 		System.out.println("Extracting RPA file " + rpaFilename + " to " + output);
 		//Place exe in temp dir to use
 		String toolName = "";
-		if (!output.exists()) {
-			output.mkdirs();
-		}
+		assert output.exists() || !output.mkdirs();
 		try {
 			String OS = System.getProperty("os.name").toLowerCase();
-			if (OS.indexOf("win") >= 0) {
+			if (OS.contains("win")) {
 				toolName = "rpatool.exe";
 				extractRPATool("rpatool.exe");
 				runRPAEXE(rpaFilename, output);
 			}
-			else if (OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0 || OS.indexOf("mac") >= 0) {
+			else if (OS.contains("nix") || OS.contains("nux") || OS.indexOf("aix") > 0 || OS.contains("mac")) {
 				toolName = "rpatool.py";
 				extractRPATool("rpatool.py");
 				runRPAPy(rpaFilename, output);
@@ -90,7 +90,7 @@ public class press_stitch_archive {
 		} catch (IOException | InterruptedException e) {
 			if (toolName.equals("rpatool.py"))
 				System.out.println("Error: Could not run python file. Make sure python is installed. Try's python then python3.");
-			else if(toolName.equals("rpatool.exe")) {
+			else {
 				System.out.println("Error: Could not run exe. If environment is not windows, contact developer.");
 			}
 		}
@@ -105,7 +105,7 @@ public class press_stitch_archive {
 
 	//This runs after file has been extracted
 	public static void unpackArchive(String folder) { //Folder is the folder we are checking in extracted
-		String folderArchive = Paths.get(cwd, folder, "Game").toString() + "\\";
+		String folderArchive = Paths.get(cwd, folder, "Game") + "\\";
 	    File destinationFolder = new File(Paths.get(folderExtracted, folder).toString());
 	    
 	    if(destinationFolder.exists()){
@@ -118,26 +118,10 @@ public class press_stitch_archive {
 	        extractRPAFile(folderArchive + fileNameScripts, destinationFolder);}
 	}
 
-	//Creates the folders to extract to
-	public static void createFolders(File folder) {
-	    if (!folder.exists()) {
-	    	folder.mkdirs();
-	    }
-	}
-	//Verifies that source folders exist
-    public static void verifyFolders(File folder) {
-    	if (!folder.exists()) {
-    		System.out.println(folderName + folder);
-    		System.out.println("Data folders not present aborting");
-	        System.exit(1);
-    	}
-    }
 	//Extract all the RPA files. Called both by main and by the press-stitch.py script.
     public static void extractAllRPAFiles() {
     	File folderExtracted2 = new File(folderExtracted);
-	    if (!folderExtracted2.exists()) {
-	    	folderExtracted2.mkdirs();
-	    }
+		assert folderExtracted2.exists() || !folderExtracted2.mkdirs();
 	    for (String ver: folderVersion) {
 	        File extractFolder = new File(Paths.get(folderExtracted, folderName + ver).toString());
 	        File UnZippedGame = new File(Paths.get(folderName + ver).toString());
@@ -155,7 +139,7 @@ public class press_stitch_archive {
 	            unpackArchive(folderName + ver);
 	        }
 	        else {
-	        	System.out.println("Extracted data folder " + extractFolder.toString() + " exists, skipping RPA extract");
+	        	System.out.println("Extracted data folder " + extractFolder + " exists, skipping RPA extract");
 	        }
 	    }
     }

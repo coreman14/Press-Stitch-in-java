@@ -2,8 +2,8 @@ package press;
 import java.util.LinkedHashMap;
 
 public class backgrounds_map {
-	public static LinkedHashMap<String, String> backgroundMap35 = new LinkedHashMap<String, String>();
-	public static LinkedHashMap<String, String> backgroundMap45 = new LinkedHashMap<String, String>();
+	public static LinkedHashMap<String, String> backgroundMap35 = new LinkedHashMap<>();
+	public static LinkedHashMap<String, String> backgroundMap45 = new LinkedHashMap<>();
 	public static void fill_backgrounds_map() {
 		backgroundMap35.put("aprilroomday", "coxaprilday");
 		backgroundMap35.put("aprilroomdusk", "coxaprildusk");

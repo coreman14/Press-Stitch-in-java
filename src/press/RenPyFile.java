@@ -14,20 +14,15 @@ public class RenPyFile {
 	public static String[] trimStringByStringArray(String text) {
 		return trimStringByString(text, ":").split("\\W");
 	}
-	public static String[] trimStringByStringArray(String text, String trimBy) {
-		return trimStringByString(text, trimBy).split("\\W");
-	}
+
 	public static String trimStringByStringMulti(String text, String... trimBy) {
-		ArrayList<String> trims = new ArrayList<String>(Arrays.asList(trimBy));
+		ArrayList<String> trims = new ArrayList<>(Arrays.asList(trimBy));
 		for (String x: trims) {
 			text = trimStringByString(text, x);
 		}
 		return text.strip();
 	}
-	
-	public static String trimStringByString(String text) {
-		return trimStringByString(text, ":");
-	}
+
 	public static String trimStringByString(String text, String trimBy) {//helper function to replace strip
 	    int beginIndex = 0;
 	    int endIndex = text.length();
@@ -45,7 +40,7 @@ public class RenPyFile {
 	
 	public String type;
 	public ArrayList<String> lines;
-	public int numLines  = 0;
+	public int numLines;
 	public LinkedHashMap<String, Integer> labelList;
 	public LinkedHashMap<String, String> backMap;
 	public LinkedHashMap<String, LinkedHashMap<String, String>> charMap;
@@ -56,17 +51,17 @@ public class RenPyFile {
 	public boolean trackVis;
 	public LinkedHashMap<Integer, Boolean> lineModifiedFlags;
 	public RenPyFile() {
-	    lines = new ArrayList<String>();
+	    lines = new ArrayList<>();
 	    numLines  = 0;
-	    labelList = new LinkedHashMap<String, Integer>();
-	    backMap   = new LinkedHashMap<String, String>();
-	    charMap   = new LinkedHashMap<String, LinkedHashMap<String, String>>();
-	    v6Map     = new LinkedHashMap<String, LinkedHashMap<String, String>>();
-	    charFlip  = new ArrayList<String>();
-	    visLines  = new ArrayList<Integer>();
-	    showLines = new ArrayList<Integer>();
+	    labelList = new LinkedHashMap<>();
+	    backMap   = new LinkedHashMap<>();
+	    charMap   = new LinkedHashMap<>();
+	    v6Map     = new LinkedHashMap<>();
+	    charFlip  = new ArrayList<>();
+	    visLines  = new ArrayList<>();
+	    showLines = new ArrayList<>();
 	    trackVis  = false;
-	    lineModifiedFlags = new LinkedHashMap<Integer, Boolean>();
+	    lineModifiedFlags = new LinkedHashMap<>();
 	    type = "Z";	
 	    }
 
@@ -92,12 +87,11 @@ public class RenPyFile {
 
 	}
 	  public void readFile(String fn) {
-		String input = "";
+		String input;
 		try (BufferedReader text_file = new BufferedReader(new FileReader(fn, StandardCharsets.UTF_8))){
 			while((input = text_file.readLine()) != null) {
 				lines.add(input+"\n");
 			}
-			text_file.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -105,7 +99,7 @@ public class RenPyFile {
 		additionalReadLine();
 	  }
 	  public void writeFile(String fn) {
-			try (BufferedWriter text_file = new BufferedWriter(new FileWriter(fn, StandardCharsets.UTF_8));){
+			try (BufferedWriter text_file = new BufferedWriter(new FileWriter(fn, StandardCharsets.UTF_8))){
 				for(String input:lines) {
 					if (input.contains("\n")) {
 						text_file.write(input);
@@ -115,14 +109,13 @@ public class RenPyFile {
 					}
 					
 				}
-				text_file.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 	  }
 	  public void findLabels() {
 	    int i = 0;
-	    String strippedLine = "";
+	    String strippedLine;
 	    while( i < numLines) {
 	    	strippedLine = lines.get(i).strip();
 	    	if (strippedLine.startsWith("label")){
@@ -193,7 +186,7 @@ public class RenPyFile {
 	  // Flip all V3 affected characters left-to-right
 	  public void doFlips() {
 		  
-		Collections.sort(visLines, Collections.reverseOrder());
+		visLines.sort(Collections.reverseOrder());
 	    for (int lineNum: visLines) {
 	        addXZoom(lineNum);
 	    }
@@ -204,8 +197,7 @@ public class RenPyFile {
 	    for (int i: showLines) {
 	    	String strippedLine = lines.get(i).strip();
 	    	if (strippedLine.startsWith("show")) {reverseXZoom(i);}
-	    	i = i + 1;
-	    }
+		}
 	  }
 	  // Reverses an xzoom line in a 'show' statement
 	  public void reverseXZoom(int lineNum) {
@@ -271,39 +263,39 @@ public class RenPyFile {
 		  return line;} // Place holders for inheritences
 	  
 	   private void additionalReadLine(){
-			if (type.equals("C")) {
-				lines.set(5, "    hide maind\n");
-			}
-			else if (type.equals("G")) {
-				// Patch the menu to enable the Goopy path
-				lines.set(85, "        \"Tried to become a clone of her.\":\n");
-				lines.set(86, "\n");
-				lines.set(87, "\n");
-				lines.set(89, "\n");
+		   switch (type) {
+			   case "C" -> lines.set(5, "    hide maind\n");
+			   case "G" -> {
+				   // Patch the menu to enable the Goopy path
+				   lines.set(85, "        \"Tried to become a clone of her.\":\n");
+				   lines.set(86, "\n");
+				   lines.set(87, "\n");
+				   lines.set(89, "\n");
 
-				// Make sure 'maind' displayable is hidden on entry
-				lines.add(69381, "        hide maind\n");
-				numLines = lines.size();
+				   // Make sure 'maind' displayable is hidden on entry
+				   lines.add(69381, "        hide maind\n");
+				   numLines = lines.size();
 
-				// Alter the Eliza bed CG
-				lines.set(69698, "                scene cgbase eliza sleep 1\n");
-				lines.set(69699, "                show cgex eliza sleep 1\n");
+				   // Alter the Eliza bed CG
+				   lines.set(69698, "                scene cgbase eliza sleep 1\n");
+				   lines.set(69699, "                show cgex eliza sleep 1\n");
 
-				// The Eliza H pic is missing in 0.5, patch it out
-				lines.set(69774, "                        show cgex eliza sleep 6\n");
-				lines.set(69775, "\n");			
-			}
-			else if (type.equals("E")) {
-				lines.set(6396, " ".repeat(20) + "if timer_value >= 30:\n");
-				lines.set(6552, " ".repeat(20) + "if timer_value >= 30:\n");
-				lines.set(6713, " ".repeat(20) + "if timer_value >= 30:\n");
-				//Patch the "Karyn" if switched menu option in kpathendroundup
-				lines.set(68980, "            jump kpathendroundup2\n");
+				   // The Eliza H pic is missing in 0.5, patch it out
+				   lines.set(69774, "                        show cgex eliza sleep 6\n");
+				   lines.set(69775, "\n");
+			   }
+			   case "E" -> {
+				   lines.set(6396, " ".repeat(20) + "if timer_value >= 30:\n");
+				   lines.set(6552, " ".repeat(20) + "if timer_value >= 30:\n");
+				   lines.set(6713, " ".repeat(20) + "if timer_value >= 30:\n");
+				   //Patch the "Karyn" if switched menu option in kpathendroundup
+				   lines.set(68980, "            jump kpathendroundup2\n");
 
-				// Patch Michelle's age
-				lines.set(587, lines.get(587).replace("14", "15"));
-				lines.set(589, lines.get(589).replace("14", "15"));
-			}
+				   // Patch Michelle's age
+				   lines.set(587, lines.get(587).replace("14", "15"));
+				   lines.set(589, lines.get(589).replace("14", "15"));
+			   }
+		   }
 		  }
 	   
 }

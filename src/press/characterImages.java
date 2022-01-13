@@ -2,11 +2,11 @@ package press;
 import java.util.LinkedHashMap;
 
 public class characterImages {
-	public static LinkedHashMap<String, LinkedHashMap<String, String>> characterImageMap35 = new LinkedHashMap<String, LinkedHashMap<String, String>>();
-	public static LinkedHashMap<String, LinkedHashMap<String, String>> characterImageMap45 = new LinkedHashMap<String, LinkedHashMap<String, String>>();
-	public static LinkedHashMap<String, LinkedHashMap<String, String>> characterImageMap56 = new LinkedHashMap<String, LinkedHashMap<String, String>>();
+	public static LinkedHashMap<String, LinkedHashMap<String, String>> characterImageMap35 = new LinkedHashMap<>();
+	public static LinkedHashMap<String, LinkedHashMap<String, String>> characterImageMap45 = new LinkedHashMap<>();
+	public static LinkedHashMap<String, LinkedHashMap<String, String>> characterImageMap56 = new LinkedHashMap<>();
 	public static void fill_characterImages() {
-		LinkedHashMap<String, String> chris = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> chris = new LinkedHashMap<>();
 			chris.put("chris_base_full_hair_001", "");
 			chris.put("chris_base_full_hair_002", "");
 			chris.put("chris_base_full_hair_003", "");
@@ -137,7 +137,7 @@ public class characterImages {
 			chris.put("chris_ex_full_030", "chris_ex_full_017_002");
 		characterImageMap35.put("chris", chris);
 
-		LinkedHashMap<String, String> ciel = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> ciel = new LinkedHashMap<>();
 			ciel.put("ciel_base_001", "ciel_base_001");
 			ciel.put("ciel_base_002", "ciel_base_002");
 			ciel.put("ciel_base_003", "ciel_base_003");
@@ -180,7 +180,7 @@ public class characterImages {
 			ciel.put("ciel_ex_full_016", "ciel_ex_hair_headband_full_005_aroused3_003");
 		characterImageMap35.put("ciel", ciel);
 
-		LinkedHashMap<String, String> eliza = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> eliza = new LinkedHashMap<>();
 			eliza.put("eliza_base_001", "eliza_base_001");
 			eliza.put("eliza_base_002", "eliza_base_002");
 			eliza.put("eliza_base_003", "eliza_base_003");
@@ -266,7 +266,7 @@ public class characterImages {
 			eliza.put("eliza_ex_022", "eliza_ex_009_open_003");
 		characterImageMap35.put("eliza", eliza);
 
-		LinkedHashMap<String, String> karyn = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> karyn = new LinkedHashMap<>();
 			karyn.put("karyn_base_001", "karyn_base_001");
 			karyn.put("karyn_base_002", "karyn_base_002");
 			karyn.put("karyn_base_003", "karyn_base_003");
@@ -400,7 +400,7 @@ public class characterImages {
 			karyn.put("karyn_ex_full_022", "karyn_ex_full_019_003");
 		characterImageMap35.put("karyn", karyn);
 
-		LinkedHashMap<String, String> main = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> main = new LinkedHashMap<>();
 			main.put("main_base_001", "main_base_001");
 			main.put("main_base_adult_001", "");
 			main.put("main_ex_001", "main_ex_001_001");
@@ -440,7 +440,7 @@ public class characterImages {
 			main.put("main_ex_adult_011", "");
 		characterImageMap35.put("main", main);
 
-		LinkedHashMap<String, String> martha = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> martha = new LinkedHashMap<>();
 			martha.put("martha_base_001", "martha_base_001");
 			martha.put("martha_base_002", "martha_base_002");
 			martha.put("martha_base_003", "martha_base_003");
@@ -482,7 +482,7 @@ public class characterImages {
 			martha.put("martha_ex_029", "martha_ex_023_003");
 		characterImageMap35.put("martha", martha);
 
-		LinkedHashMap<String, String> michelle = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> michelle = new LinkedHashMap<>();
 			michelle.put("michelle_base_001", "michelle_base_001");
 			michelle.put("michelle_base_002", "michelle_base_002");
 			michelle.put("michelle_base_003", "michelle_base_003");
@@ -576,7 +576,7 @@ public class characterImages {
 			michelle.put("michelle_ex_full_021", "michelle_ex_full_010_daze_003");
 		characterImageMap35.put("michelle", michelle);
 
-		LinkedHashMap<String, String> mother = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> mother = new LinkedHashMap<>();
 			mother.put("mother_base_001", "mother_base_001");
 			mother.put("mother_base_002", "mother_base_002");
 			mother.put("mother_base_full_001", "mother_base_full_001");
@@ -626,7 +626,7 @@ public class characterImages {
 			mother.put("mother_ex_full_014", "mother_ex_full_009_closed_002");
 		characterImageMap35.put("mother", mother);
 
-		LinkedHashMap<String, String> nick = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> nick = new LinkedHashMap<>();
 			nick.put("nick_base_001", "nick_base_001");
 			nick.put("nick_ex_001", "nick_ex_001_001");
 			nick.put("nick_ex_002", "nick_ex_002_001");
@@ -639,7 +639,7 @@ public class characterImages {
 			nick.put("nick_ex_009", "nick_ex_009_001");
 		characterImageMap35.put("nick", nick);
 
-		LinkedHashMap<String, String> vanessa = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> vanessa = new LinkedHashMap<>();
 			vanessa.put("vanessa_base_001", "vanessa_base_001");
 			vanessa.put("vanessa_base_002", "vanessa_base_002");
 			vanessa.put("vanessa_base_003", "vanessa_base_003");
@@ -780,7 +780,7 @@ public class characterImages {
 			vanessa.put("vanessa_ex_full_021", "vanessa_ex_full_011_open_003");
 		characterImageMap35.put("vanessa", vanessa);
 
-		LinkedHashMap<String, String> alma = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> alma = new LinkedHashMap<>();
 			alma.put("alma_base_001", "alma_base_001");
 			alma.put("alma_base_full_001", "alma_base_full_001");
 			alma.put("alma_base_full_kimono_001", "alma_base_full_kimono_001");
@@ -831,7 +831,7 @@ public class characterImages {
 			alma.put("alma_ex_full_008_001", "alma_ex_full_008_001");
 		characterImageMap45.put("alma", alma);
 
-		LinkedHashMap<String, String> amber = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> amber = new LinkedHashMap<>();
 			amber.put("amber_base_001", "amber_base_001");
 			amber.put("amber_base_002", "amber_base_002");
 			amber.put("amber_base_cas_001", "amber_base_cas_001");
@@ -902,7 +902,7 @@ public class characterImages {
 			amber.put("amber_ex_full_014_002", "amber_ex_full_012_002");
 		characterImageMap45.put("amber", amber);
 
-		LinkedHashMap<String, String> anna = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> anna = new LinkedHashMap<>();
 			anna.put("anna_be0_y_001", "");
 			anna.put("anna_be0_y_002", "");
 			anna.put("anna_be1_y_001", "");
@@ -965,7 +965,7 @@ public class characterImages {
 			anna.put("anna_ex_y_013_002", "");
 		characterImageMap45.put("anna", anna);
 
-		LinkedHashMap<String, String> april = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> april = new LinkedHashMap<>();
 			april.put("april_base_001", "april_base_001");
 			april.put("april_base_002", "april_base_002");
 			april.put("april_base_male_001", "april_base_male_001");
@@ -1013,7 +1013,7 @@ public class characterImages {
 			april.put("april_mut_naked_skirt_002", "");
 		characterImageMap45.put("april", april);
 
-		LinkedHashMap<String, String> candice = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> candice = new LinkedHashMap<>();
 			candice.put("candice_base_001", "candice_base_001");
 			candice.put("candice_base_002", "candice_base_002");
 			candice.put("candice_base_full_001", "candice_base_full_001");
@@ -1092,7 +1092,7 @@ public class characterImages {
 			candice.put("candice_ex_full_011_002", "candice_ex_full_012_002");
 		characterImageMap45.put("candice", candice);
 
-		chris = new LinkedHashMap<String, String>();
+		chris = new LinkedHashMap<>();
 			chris.put("chris_base_full_naked_001", "chris_base_full_naked_001");
 			chris.put("chris_base_full_naked_002", "chris_base_full_naked_002");
 			chris.put("chris_base_full_naked_003", "chris_base_full_naked_003");
@@ -1231,7 +1231,7 @@ public class characterImages {
 			chris.put("chris_mut_under_hair_003", "chris_mut_under_hair_003");
 		characterImageMap45.put("chris", chris);
 
-		ciel = new LinkedHashMap<String, String>();
+		ciel = new LinkedHashMap<>();
 			ciel.put("ciel_base_001", "ciel_base_001");
 			ciel.put("ciel_base_002", "ciel_base_002");
 			ciel.put("ciel_base_003", "ciel_base_003");
@@ -1275,7 +1275,7 @@ public class characterImages {
 			ciel.put("ciel_ex_full_016_003", "ciel_ex_full_005_aroused3_003");
 		characterImageMap45.put("ciel", ciel);
 
-		LinkedHashMap<String, String> cindy = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> cindy = new LinkedHashMap<>();
 			cindy.put("cindy_base_001", "cindy_base_001");
 			cindy.put("cindy_base_002", "cindy_base_002");
 			cindy.put("cindy_ex_001_001", "cindy_ex_001_001");
@@ -1294,7 +1294,7 @@ public class characterImages {
 			cindy.put("cindy_ex_014_002", "cindy_ex_009_closed_002");
 		characterImageMap45.put("cindy", cindy);
 
-		LinkedHashMap<String, String> donald = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> donald = new LinkedHashMap<>();
 			donald.put("donald_base_001", "donald_base_001");
 			donald.put("donald_base_full_001", "");
 			donald.put("donald_base_full_towel_001", "");
@@ -1350,7 +1350,7 @@ public class characterImages {
 			donald.put("donald_mut_skin_001", "donald_mut_doskin_001");
 		characterImageMap45.put("donald", donald);
 
-		eliza = new LinkedHashMap<String, String>();
+		eliza = new LinkedHashMap<>();
 			eliza.put("eliza_be0_full_naked_002", "eliza_be0_full_naked_002");
 			eliza.put("eliza_be0_full_under_002", "eliza_be0_full_under_002");
 			eliza.put("eliza_be0_naked_002", "eliza_be0_naked_002");
@@ -1525,7 +1525,7 @@ public class characterImages {
 			eliza.put("eliza_mut_short_003", "eliza_mut_short_003");
 		characterImageMap45.put("eliza", eliza);
 
-		LinkedHashMap<String, String> erin = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> erin = new LinkedHashMap<>();
 			erin.put("erin_base_001", "erin_base_001");
 			erin.put("erin_base_002", "erin_base_002");
 			erin.put("erin_base_003", "erin_base_003");
@@ -1641,7 +1641,7 @@ public class characterImages {
 			erin.put("erin_ex_full_030_003", "erin_ex_full_020_003");
 		characterImageMap45.put("erin", erin);
 
-		LinkedHashMap<String, String> ermach = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> ermach = new LinkedHashMap<>();
 			ermach.put("ermach_base_001", "ermach_base_001");
 			ermach.put("ermach_base_full_001", "ermach_base_full_001");
 			ermach.put("ermach_ex_001_001", "ermach_ex_001_001");
@@ -1688,7 +1688,7 @@ public class characterImages {
 			ermach.put("ermach_mut_machhair_001", "");
 		characterImageMap45.put("ermach", ermach);
 
-		LinkedHashMap<String, String> hillary = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> hillary = new LinkedHashMap<>();
 			hillary.put("hillary_base_cas_001", "hillary_base_casual_001");
 			hillary.put("hillary_base_maid_001", "hillary_base_maid_001");
 			hillary.put("hillary_base_naked_001", "hillary_base_naked_001");
@@ -1718,7 +1718,7 @@ public class characterImages {
 			hillary.put("hillary_ex_011_001", "hillary_ex_012_001");
 		characterImageMap45.put("hillary", hillary);
 
-		LinkedHashMap<String, String> jenna = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> jenna = new LinkedHashMap<>();
 			jenna.put("jenna_base_001", "jenna_base_001");
 			jenna.put("jenna_base_002", "jenna_base_002");
 			jenna.put("jenna_base_full_001", "jenna_base_full_001");
@@ -1809,12 +1809,12 @@ public class characterImages {
 			jenna.put("jenna_ex_full_013_002", "jenna_ex_full_012_002");
 		characterImageMap45.put("jenna", jenna);
 
-		LinkedHashMap<String, String> jennifer = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> jennifer = new LinkedHashMap<>();
 			jennifer.put("jennifer_base_001", "jennifer_base_001");
 			jennifer.put("jennifer_ex_001_001", "jennifer_ex_001_001");
 		characterImageMap45.put("jennifer", jennifer);
 
-		LinkedHashMap<String, String> jillian = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> jillian = new LinkedHashMap<>();
 			jillian.put("jillian_base_001", "jillian_base_001");
 			jillian.put("jillian_base_002", "jillian_base_002");
 			jillian.put("jillian_base_dom_001", "");
@@ -1917,7 +1917,7 @@ public class characterImages {
 			jillian.put("jillian_ex_full_017_002", "jillian_ex_full_012_smile_002");
 		characterImageMap45.put("jillian", jillian);
 
-		karyn = new LinkedHashMap<String, String>();
+		karyn = new LinkedHashMap<>();
 			karyn.put("karyn_be0_002", "karyn_be0_002");
 			karyn.put("karyn_be0_cosplay_002", "karyn_be0_cosplay_002");
 			karyn.put("karyn_be0_full_002", "karyn_be0_full_002");
@@ -2078,12 +2078,12 @@ public class characterImages {
 			karyn.put("karyn_ex_full_001", "karyn_ex_full_001");
 		characterImageMap45.put("karyn", karyn);
 
-		LinkedHashMap<String, String> kayla = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> kayla = new LinkedHashMap<>();
 			kayla.put("kayla_base_001", "kayla_base_001");
 			kayla.put("kayla_ex_001_001", "kayla_ex_001_001");
 		characterImageMap45.put("kayla", kayla);
 
-		main = new LinkedHashMap<String, String>();
+		main = new LinkedHashMap<>();
 			main.put("main_base_001", "main_base_001");
 			main.put("main_base_full_001", "main_base_full_001");
 			main.put("main_base_o_001", "");
@@ -2161,7 +2161,7 @@ public class characterImages {
 			main.put("main_ex_o_011_001", "");
 		characterImageMap45.put("main", main);
 
-		martha = new LinkedHashMap<String, String>();
+		martha = new LinkedHashMap<>();
 			martha.put("martha_base_001", "martha_base_001");
 			martha.put("martha_base_002", "martha_base_002");
 			martha.put("martha_base_003", "martha_base_003");
@@ -2264,7 +2264,7 @@ public class characterImages {
 			martha.put("martha_ex_full_029_003", "martha_ex_full_023_003");
 		characterImageMap45.put("martha", martha);
 
-		LinkedHashMap<String, String> melina = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> melina = new LinkedHashMap<>();
 			melina.put("melina_base_001", "melina_base_001");
 			melina.put("melina_base_002", "melina_base_002");
 			melina.put("melina_base_full_001", "melina_base_full_001");
@@ -2317,7 +2317,7 @@ public class characterImages {
 			melina.put("melina_mut_naked_skirt_002", "");
 		characterImageMap45.put("melina", melina);
 
-		michelle = new LinkedHashMap<String, String>();
+		michelle = new LinkedHashMap<>();
 			michelle.put("michelle_be1_001", "michelle_be1_001");
 			michelle.put("michelle_be1_002", "michelle_be1_002");
 			michelle.put("michelle_be1_003", "michelle_be1_003");
@@ -2489,7 +2489,7 @@ public class characterImages {
 			michelle.put("michelle_ex_full_021_003", "michelle_ex_full_010_daze_003");
 		characterImageMap45.put("michelle", michelle);
 
-		LinkedHashMap<String, String> mika = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> mika = new LinkedHashMap<>();
 			mika.put("mika_base_001", "mika_base_001");
 			mika.put("mika_base_002", "mika_base_002");
 			mika.put("mika_base_cas_001", "mika_base_cas_001");
@@ -2632,7 +2632,7 @@ public class characterImages {
 			mika.put("mika_ex_o_013_002", "");
 		characterImageMap45.put("mika", mika);
 
-		mother = new LinkedHashMap<String, String>();
+		mother = new LinkedHashMap<>();
 			mother.put("mother_base_001", "mother_base_001");
 			mother.put("mother_base_002", "mother_base_002");
 			mother.put("mother_base_cas_001", "mother_base_cas_001");
@@ -2727,13 +2727,13 @@ public class characterImages {
 			mother.put("mother_ex_full_013_002", "mother_ex_full_012_002");
 		characterImageMap45.put("mother", mother);
 
-		LinkedHashMap<String, String> nelson = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> nelson = new LinkedHashMap<>();
 			nelson.put("nelson_base_001", "nelson_base_001");
 			nelson.put("nelson_ex_001_001", "nelson_ex_001_001");
 			nelson.put("nelson_ex_002_001", "nelson_ex_002_001");
 		characterImageMap45.put("nelson", nelson);
 
-		nick = new LinkedHashMap<String, String>();
+		nick = new LinkedHashMap<>();
 			nick.put("nick_base_001", "nick_base_001");
 			nick.put("nick_base_cas_001", "nick_base_cas_001");
 			nick.put("nick_base_full_001", "nick_base_full_001");
@@ -2794,7 +2794,7 @@ public class characterImages {
 			nick.put("nick_ex_full_008_smile_001", "nick_ex_full_008_smile_001");
 		characterImageMap45.put("nick", nick);
 
-		LinkedHashMap<String, String> nurse = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> nurse = new LinkedHashMap<>();
 			nurse.put("nurse_be1_001", "nurse_be1_001");
 			nurse.put("nurse_be1_002", "nurse_be1_002");
 			nurse.put("nurse_be1_003", "nurse_be1_003");
@@ -2901,7 +2901,7 @@ public class characterImages {
 			nurse.put("nurse_ex_full_013_003", "nurse_ex_full_013_003");
 		characterImageMap45.put("nurse", nurse);
 
-		LinkedHashMap<String, String> sean = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> sean = new LinkedHashMap<>();
 			sean.put("sean_base_001", "sean_base_001");
 			sean.put("sean_base_y_001", "");
 			sean.put("sean_ex_001_001", "sean_ex_001_001");
@@ -2934,7 +2934,7 @@ public class characterImages {
 			sean.put("sean_ex_y_014_001", "");
 		characterImageMap45.put("sean", sean);
 
-		vanessa = new LinkedHashMap<String, String>();
+		vanessa = new LinkedHashMap<>();
 			vanessa.put("vanessa_be0_003", "vanessa_be0_003");
 			vanessa.put("vanessa_be0_cas_002", "vanessa_be0_cas_002");
 			vanessa.put("vanessa_be0_full_003", "vanessa_be0_full_003");
@@ -3075,7 +3075,7 @@ public class characterImages {
 			vanessa.put("vanessa_ex_full_021_003", "vanessa_ex_full_011_open_003");
 		characterImageMap45.put("vanessa", vanessa);
 
-		LinkedHashMap<String, String> waitress = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> waitress = new LinkedHashMap<>();
 			waitress.put("waitress_base_001", "waitress_base_001");
 			waitress.put("waitress_ex_001_001", "waitress_ex_001_001");
 			waitress.put("waitress_ex_002_001", "waitress_ex_002_001");
@@ -3090,7 +3090,7 @@ public class characterImages {
 			waitress.put("waitress_ex_011_001", "waitress_ex_011_001");
 		characterImageMap45.put("waitress", waitress);
 
-		eliza = new LinkedHashMap<String, String>();
+		eliza = new LinkedHashMap<>();
 			eliza.put("eliza_ex_001_001", "eliza_ex_001_001");
 			eliza.put("eliza_ex_001_empty_001", "eliza_ex_001_empty_001");
 			eliza.put("eliza_ex_001_neutral_001", "eliza_ex_001_neutral_001");
@@ -3191,7 +3191,7 @@ public class characterImages {
 			eliza.put("eliza_ex_full_016_003", "eliza_ex_full_013_smile_003");
 		characterImageMap56.put("eliza", eliza);
 
-		main = new LinkedHashMap<String, String>();
+		main = new LinkedHashMap<>();
 			main.put("main_ex_001_001", "main_ex_001_001");
 			main.put("main_ex_001_empty_001", "main_ex_001_empty_001");
 			main.put("main_ex_001_neutral_001", "main_ex_001_neutral_001");

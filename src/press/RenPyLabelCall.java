@@ -20,10 +20,9 @@ public class RenPyLabelCall {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if(!(obj instanceof RenPyLabelCall)) {
+		if(!(obj instanceof RenPyLabelCall o)) {
 			return false;
 		}
-		RenPyLabelCall o = (RenPyLabelCall) obj;
 		return (this.vars.equals(o.vars) && this.label.equals(o.label));
 	}
 }

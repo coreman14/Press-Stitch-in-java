@@ -15,13 +15,13 @@ public class press_stitch {
 	public String filename_04 = "Press-SwitchV0.4a-pc";
 	public String filename_05 = "Press-SwitchV0.5c-pc";
 	public String filename_06 = "Press-SwitchV0.6";
-	public LinkedHashMap<String, String> characterLabelMap = new LinkedHashMap<String, String>();
-	public LinkedHashMap<String, Boolean> characterDoRemap = new LinkedHashMap<String, Boolean>();
-	public LinkedHashMap<String, String> pyVariables = new LinkedHashMap<String, String>();
-	public LinkedHashMap<String, String> personDispVars = new LinkedHashMap<String, String>();
+	public LinkedHashMap<String, String> characterLabelMap = new LinkedHashMap<>();
+	public LinkedHashMap<String, Boolean> characterDoRemap = new LinkedHashMap<>();
+	public LinkedHashMap<String, String> pyVariables = new LinkedHashMap<>();
+	public LinkedHashMap<String, String> personDispVars = new LinkedHashMap<>();
 	public boolean inlineErrors = false;
-	public ArrayList<RenPyThread> threads = new ArrayList<RenPyThread>();
-	public ArrayList<RenPyLabelCall> labelCalls = new ArrayList<RenPyLabelCall>();
+	public ArrayList<RenPyThread> threads = new ArrayList<>();
+	public ArrayList<RenPyLabelCall> labelCalls = new ArrayList<>();
 
 	public void fillvars() {
 		characterLabelMap.put("alma", "alma");
@@ -185,7 +185,6 @@ public class press_stitch {
 	// -----------------------------------------------------------------------------
 	public static void printRed(String s) {
 		print("\033[1;31m" + s + "\033[0m");
-		new Exception().printStackTrace();
 	}
 
 	// -----------------------------------------------------------------------------
@@ -207,27 +206,28 @@ public class press_stitch {
 	// -----------------------------------------------------------------------------
 	public String md5(String fname) {
 		final int byteRead = 4096;
-		MessageDigest hash = null;
-		String hd = null;
-		try (InputStream inputStream = new FileInputStream(fname);) {
+		MessageDigest hash;
+		StringBuilder hd = null;
+		try (InputStream inputStream = new FileInputStream(fname)) {
 			hash = MessageDigest.getInstance("MD5");
 
-			byte[] chunk = null;
+			byte[] chunk;
 			while (inputStream.available() != 0) {
 				chunk = inputStream.readNBytes(byteRead);
 				hash.update(chunk);
 			}
 			BigInteger hash2 = new BigInteger(1, hash.digest());
-			hd = hash2.toString(16); // BigInteger strips leading 0's
+			hd = new StringBuilder(hash2.toString(16)); // BigInteger strips leading 0's
 			while (hd.length() < 32) {
-				hd = "0" + hd;
+				hd.insert(0, "0");
 			} // pad with leading 0's
 		} catch (NoSuchAlgorithmException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		return hd;
+		assert hd != null;
+		return hd.toString();
 
 	}
 
@@ -242,8 +242,8 @@ public class press_stitch {
 		String actualHash = md5(filename);
 		if (!actualHash.equals(desiredHash)) {
 			showError("Checksum is not correct, please download the file again");
-			print("Desired MD5: " + desiredHash.toString());
-			print("Actual MD5 : " + actualHash.toString());
+			print("Desired MD5: " + desiredHash);
+			print("Actual MD5 : " + actualHash);
 			return false;
 		}
 		print("Succeeded");
@@ -277,42 +277,18 @@ public class press_stitch {
 	}
 
 	// -----------------------------------------------------------------------------
-	public boolean checkFile(String dirname, String checksum, boolean verbose) {
+	public boolean checkForBadFile(String dirname, String checksum, boolean verbose) {
 		File checkDir = new File(dirname);
 		if (checkDir.isDirectory()) {
 			print("Directory " + dirname + " exists, ZIP extract skipped");
-			return true;
+			return false;
 		}
 		String filename = dirname + ".zip";
 		if (!verifySingleFile(filename, checksum)) {
-			return false;
+			return true;
 		}
 		unzipFile(filename, verbose);
-		return true;
-	}
-
-	// -----------------------------------------------------------------------------
-	public void doMakeDir(String path) {
-		File checkDir = new File(path);
-		if (checkDir.isDirectory()) {
-			print("Directory " + path + " already exists, skipping creation");
-		} else {
-			print("Creating directory " + path);
-			checkDir.mkdirs();
-		}
-	}
-
-	// -----------------------------------------------------------------------------
-	public void doCopyFile(String srcPath, String dstPath, String filename) {
-		File srcFile = new File(Paths.get(srcPath, filename).toString());
-		File dstFile = new File(dstPath);
-		print("Copying file " + srcFile + " into " + dstPath);
-		try {
-			FileUtils.copyFile(srcFile, dstFile);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		return false;
 	}
 
 	// -----------------------------------------------------------------------------
@@ -347,7 +323,7 @@ public class press_stitch {
 	// -----------------------------------------------------------------------------
 	public void processCommand(RenPyFile rpFile, RenPyThread thread, int lineNum, String line) {
 		// Checking to see if command had more than 1 option on it
-		String[] fields = line.split(" (?=(?:[^\\\"]*\\\"[^\\\"]*\\\")*(?![^\\\"]*\\\"))");
+		String[] fields = line.split(" (?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))");
 
 		if (fields.length < 2) {
 			return;
@@ -367,23 +343,25 @@ public class press_stitch {
 
 		String pyVar = fields[0].strip();
 		String pyVal = RenPyFile.trimStringByStringMulti(fields[2].strip(), "\"", "'").strip();
-		if (fields[1].equals("=")) {
-			thread.vars.put(pyVar, pyVal);
+		switch (fields[1]) {
+			case "=" -> thread.vars.put(pyVar, pyVal);
+
 //	    print("Variable '" + pyVar + "' becomes '" + pyVal + "'");
-		} else if (fields[1].equals("+=")) {
-			if (!thread.vars.containsKey(pyVar)) {
-				flagError(rpFile, lineNum, "Variable '" + pyVar + "' not found in thread");
+			case "+=" -> {
+				if (!thread.vars.containsKey(pyVar)) {
+					flagError(rpFile, lineNum, "Variable '" + pyVar + "' not found in thread");
+				}
+				int ans = Integer.parseInt(thread.vars.get(pyVar)) + Integer.parseInt(pyVal);
+				thread.vars.put(pyVar, String.valueOf(ans));
 			}
-			int ans = Integer.parseInt(thread.vars.get(pyVar)) + Integer.parseInt(pyVal);
-			thread.vars.put(pyVar, String.valueOf(ans));
-		} else if (fields[1].equals("-=")) {
-			if (!thread.vars.containsKey(pyVar)) {
-				flagError(rpFile, lineNum, "Variable '" + pyVar + "' not found in thread");
+			case "-=" -> {
+				if (!thread.vars.containsKey(pyVar)) {
+					flagError(rpFile, lineNum, "Variable '" + pyVar + "' not found in thread");
+				}
+				int ans = Integer.parseInt(thread.vars.get(pyVar)) - Integer.parseInt(pyVal);
+				thread.vars.put(pyVar, String.valueOf(ans));
 			}
-			int ans = Integer.parseInt(thread.vars.get(pyVar)) - Integer.parseInt(pyVal);
-			thread.vars.put(pyVar, String.valueOf(ans));
-		} else {
-			flagError(rpFile, lineNum, "Unsupported operator '" + fields[1] + "', line is: " + line);
+			default -> flagError(rpFile, lineNum, "Unsupported operator '" + fields[1] + "', line is: " + line);
 		}
 	}
 
@@ -456,7 +434,6 @@ public class press_stitch {
 			RenPyIf obj2 = (RenPyIf) obj;
 			if (condition && !obj2.hasExecuted) {
 				obj2.hasExecuted = true;
-				end = thread.stack.size();
 				thread.stack.add(new RenPyBlock(obj.lineNum + 1, obj.indent + 4));
 			}
 
@@ -464,7 +441,6 @@ public class press_stitch {
 		} else if (fields[0].equals("else")) {
 			RenPyIf obj2 = (RenPyIf) obj;
 			if (!obj2.hasExecuted) {
-				end = thread.stack.size();
 				thread.stack.add(new RenPyBlock(obj.lineNum + 1, obj.indent + 4));
 				obj2.lineNum = rpFile.blockEndLine(obj.lineNum + 1, obj.indent + 4);
 				return;
@@ -609,6 +585,7 @@ public class press_stitch {
 		// ['show', 'maind', '17', 'with', 'dissolve']
 
 		// Check for backgrounds
+		boolean b = line.strip().charAt(line.strip().length() - 1) == ':';
 		if (fields[1].equals("bg")) {
 			if (fields.length < 3) {
 				return line;
@@ -619,10 +596,10 @@ public class press_stitch {
 				return line;
 			}
 
-			String newLine = "";
+			StringBuilder newLine = new StringBuilder();
 			int indent = 0;
 			while (line.charAt(indent) == ' ') {
-				newLine += " ";
+				newLine.append(" ");
 				indent = indent + 1;
 			}
 			String newbg = rpFile.backMap.get(fields[2]);
@@ -630,18 +607,18 @@ public class press_stitch {
 				return flagError(rpFile, lineNum, "Background '" + fields[2] + "' exists but has no mapping");
 			}
 
-			newLine += fields[0] + " bg " + newbg;
+			newLine.append(fields[0]).append(" bg ").append(newbg);
 
 			int i = 3;
 			while (i < fields.length) {
-				newLine += " " + fields[i];
+				newLine.append(" ").append(fields[i]);
 				i = i + 1;
 			}
-			if (line.strip().charAt(line.strip().length() - 1) == ':') {
-				newLine += ":";
+			if (b) {
+				newLine.append(":");
 			}
-			newLine += "\n";
-			return newLine;
+			newLine.append("\n");
+			return newLine.toString();
 		}
 		// Check for 0.3 style "show cg" statements
 		if (fields[0].equals("show") && fields[1].equals("cg")) {
@@ -688,17 +665,15 @@ public class press_stitch {
 
 		// i = 1;
 		// while i < len(swappedFields):
-		// fields.append(swappedFields[i]);
-		// i = i + 1;
 
 		boolean filenameMode = true;
 		boolean baseMode = true;
-		String exFile = swappedCharName + "_ex";
-		String modifiers = "";
-		String base = "";
+		StringBuilder exFile = new StringBuilder(swappedCharName + "_ex");
+		StringBuilder modifiers = new StringBuilder();
+		StringBuilder base = new StringBuilder();
 		int i = 2;
-		ArrayList<String> placement = new ArrayList<String>(
-				Arrays.asList(new String[] { "as", "at", "behind", "with", "zorder" }));
+		ArrayList<String> placement = new ArrayList<>(
+				Arrays.asList("as", "at", "behind", "with", "zorder"));
 		while (i < fields.length) {
 			if (placement.contains(fields[i])) {
 				filenameMode = false;
@@ -706,23 +681,23 @@ public class press_stitch {
 			if (filenameMode) {
 				String field = expandNumberField(fields[i]);
 				if (field.equals("full")) {
-					exFile = exFile + "_full";
+					exFile.append("_full");
 				} else if (isNumberField(field)) {
 					baseMode = false;
 				}
 				if (baseMode) {
 					if (!(field.equals("full")) && !((charName.equals("hillary")) && (fields[i].equals("school")))) {
-						base = base + " " + fields[i];
+						base.append(" ").append(fields[i]);
 					}
 				} else {
-					exFile = exFile + "_" + field;
+					exFile.append("_").append(field);
 				}
 			} else {
-				modifiers = modifiers + " " + fields[i];
+				modifiers.append(" ").append(fields[i]);
 			}
 			i = i + 1;
 		}
-		if (exFile.equals(swappedCharName + "_ex")) {
+		if (exFile.toString().equals(swappedCharName + "_ex")) {
 			// It's something like "show candice with dissolve", with no fields so nothing
 			// to do
 			return line;
@@ -731,8 +706,8 @@ public class press_stitch {
 		String mappedFile = "";
 		boolean hasMapped = false;
 		if (swappedCharName != null && rpFile.charMap.containsKey(swappedCharName)) {
-			if (rpFile.charMap.get(swappedCharName).containsKey(exFile)) {
-				mappedFile = rpFile.charMap.get(swappedCharName).get(exFile);
+			if (rpFile.charMap.get(swappedCharName).containsKey(exFile.toString())) {
+				mappedFile = rpFile.charMap.get(swappedCharName).get(exFile.toString());
 				hasMapped = true;
 			} else if (rpFile.charMap.get(swappedCharName).containsKey(exFile + "_001")) {
 				mappedFile = rpFile.charMap.get(swappedCharName).get(exFile + "_001");
@@ -747,7 +722,7 @@ public class press_stitch {
 		} else {
 			// We're not doing a V3 or V4 mapping for this character, fake that we've done
 			// one
-			mappedFile = exFile;
+			mappedFile = exFile.toString();
 			hasMapped = true;
 		}
 
@@ -801,31 +776,31 @@ public class press_stitch {
 			return (flagError(rpFile, lineNum, "Mapping is not to an expression graphic! Source is '" + exFile
 					+ "', map is '" + mappedFile + "'"));
 		}
-		String newLine = "";
+		StringBuilder newLine = new StringBuilder();
 		int indent = 0;
 		while (line.charAt(indent) == ' ') {
-			newLine += " ";
+			newLine.append(" ");
 			indent = indent + 1;
 		}
 
-		newLine += "show " + fields[1] + base;
+		newLine.append("show ").append(fields[1]).append(base);
 
 		i = 2;
 		while (i < mappedFields.length - 1) {
 			if (isNumberField(mappedFields[i])) {
-				newLine += " " + Integer.parseInt(mappedFields[i]);
+				newLine.append(" ").append(Integer.parseInt(mappedFields[i]));
 			} else {
-				newLine += " " + mappedFields[i];
+				newLine.append(" ").append(mappedFields[i]);
 			}
 			i = i + 1;
 		}
-		newLine += modifiers;
-		if (line.strip().charAt(line.strip().length() - 1) == ':') {
-			newLine += ":";
+		newLine.append(modifiers);
+		if (b) {
+			newLine.append(":");
 		}
 
-		newLine += "\n";
-		return newLine;
+		newLine.append("\n");
+		return newLine.toString();
 	}
 	// -----------------------------------------------------------------------------
 
@@ -863,7 +838,7 @@ public class press_stitch {
 		int indent = getIndentOf(line);
 
 		RenPyBlock blk = new RenPyBlock(lineNum, indent);
-		ArrayList<RenPyObject> b = new ArrayList<RenPyObject>();
+		ArrayList<RenPyObject> b = new ArrayList<>();
 		b.add(blk);
 		RenPyThread thread = new RenPyThread(v, b);
 		threads.add(thread);
@@ -919,37 +894,28 @@ public class press_stitch {
 		boolean doScan = true;
 		boolean doV6 = false;
 		boolean verbose = false;
-		ArrayList<String> argsChecks = new ArrayList<String>(Arrays
-				.asList(new String[] { "clean", "inlineerrors", "nociel", "noeliza", "nogoopy", "noscan", "v6", "verbose"}));
+
 		if (args.length > 0) {
-			for (int j = 0; j < args.length - 1; j++) {
-				if (!argsChecks.contains(args[j])) {
-					showError("Usage is: press-stitch.py [--clean] [--verbose]");
-					System.exit(1);
-				}
-				switch (args[j]) {
-				case "--clean":
-					doClean = true;
-					break;
-				case "--inlineerrors":
-					inlineErrors = true;
-				case "--nociel":
-					doCiel = false;
-				case "--noeliza":
-					doEliza = false;
-				case "--nogoopy":
-					doGoopy = false;
-				case "--noscan":
-					doScan = false;
-				case "--verbose":
-					verbose = true;
-				case "--v6":
-					doV6 = true;
-					doCiel = false; // Cielpath disabled for 0.6
+			for (String arg : args) {
+				switch (arg) {
+					case "--clean" -> doClean = true;
+					case "--inlineerrors" -> inlineErrors = true;
+					case "--nociel" -> doCiel = false;
+					case "--noeliza" -> doEliza = false;
+					case "--nogoopy" -> doGoopy = false;
+					case "--noscan" -> doScan = false;
+					case "--verbose", "-v" -> verbose = true;
+					case "--v6" -> {
+						doV6 = true;
+						doCiel = false; // Cielpath disabled for 0.6
+					}
+					default -> {
+						showError("Usage is: press-stitch.py [--clean] [--verbose|-v]");
+						System.exit(1);
+					}
 				}
 			}
 		}
-
 		if (doClean) {
 			removeDir(filename_03);
 			removeDir(filename_04);
@@ -957,34 +923,36 @@ public class press_stitch {
 			removeDir("Extracted");
 			System.exit(0);
 		}
-
+		
 		// Normal run
 		boolean have3 = false;
 		boolean have4 = false;
 		if (new File(filename_03 + ".zip").exists()) {
-			if (!checkFile(filename_03, "e01bfc54520e8251bc73c7ee128836e2", verbose)) {
+			if (checkForBadFile(filename_03, "e01bfc54520e8251bc73c7ee128836e2", verbose)) {
 				System.exit(1);
 			}
 			have3 = true;
 			press_stitch_archive.unpackArchive(filename_03);
 		}
 		if (new File(filename_04 + ".zip").exists()) {
-			if (!checkFile(filename_03, "ca7ee44f40f802009a6d49659c8a760d", verbose)) {
+			if (checkForBadFile(filename_03, "ca7ee44f40f802009a6d49659c8a760d", verbose)) {
 				System.exit(1);
 			}
 			have4 = true;
 			press_stitch_archive.unpackArchive(filename_04);
 		}
-		if (!checkFile(filename_05, "6a4f9dac386e2fae1bce00e0157ee8b1", verbose)) {
+		if (checkForBadFile(filename_05, "6a4f9dac386e2fae1bce00e0157ee8b1", verbose)) {
 			System.exit(1);
 		}
 		if (have4 || have3) {
-			//This will do something eventually
+			System.out.println("Has 4? " + have4);
+			System.out.println("Has 3? " + have3);
+			System.out.println("Currently these do nothing");
 		}
 		press_stitch_archive.unpackArchive(filename_05);
 		String extPath5 = Paths.get("Extracted", filename_05).toString();
 		String dstPath = Paths.get(filename_05, "game").toString();
-		LinkedHashMap<String, LinkedHashMap<String, String>> v6map = new LinkedHashMap<String, LinkedHashMap<String, String>>();
+		LinkedHashMap<String, LinkedHashMap<String, String>> v6map = new LinkedHashMap<>();
 
 		if (doV6) {
 			v6map = characterImages.characterImageMap56;
@@ -1006,7 +974,7 @@ public class press_stitch {
 			dayzero.findLabels();
 			dayzero.findShows();
 			addLabelCall(dayzero, "GameStart",
-					new RenPyThread((LinkedHashMap<String, String>) pyVariables.clone(), new ArrayList<RenPyObject>()));
+					new RenPyThread((LinkedHashMap<String, String>) pyVariables.clone(), new ArrayList<>()));
 			iterateLabelCalls(dayzero);
 		}
 
@@ -1026,7 +994,7 @@ public class press_stitch {
 
 			// Process the 'leftit' label, it's the toplevel.
 			addLabelCall(cielPath, "leftit",
-					new RenPyThread(new LinkedHashMap<String, String>(), new ArrayList<RenPyObject>()));
+					new RenPyThread(new LinkedHashMap<>(), new ArrayList<>()));
 			iterateLabelCalls(cielPath);
 
 			// Flip the affected V3 characters
@@ -1054,10 +1022,10 @@ public class press_stitch {
 				// We need two calls, one for the timer < 34 and one for > 30
 				pyVariables.put("timer_value", "0"); // Less than 30
 				addLabelCall(elizaPath, "eliza", new RenPyThread((LinkedHashMap<String, String>) pyVariables.clone(),
-						new ArrayList<RenPyObject>()));
+						new ArrayList<>()));
 				pyVariables.put("timer_value", "60"); // Greater than 30
 				addLabelCall(elizaPath, "eliza", new RenPyThread((LinkedHashMap<String, String>) pyVariables.clone(),
-						new ArrayList<RenPyObject>()));
+						new ArrayList<>()));
 				iterateLabelCalls(elizaPath);
 			}
 			// Write the updated ElizaPath.rpy back out
@@ -1085,7 +1053,7 @@ public class press_stitch {
 
 			// Process the path
 			addLabelCall(goopyPath, "elizagoopypath",
-					new RenPyThread(new LinkedHashMap<String, String>(), new ArrayList<RenPyObject>()));
+					new RenPyThread(new LinkedHashMap<>(), new ArrayList<>()));
 			iterateLabelCalls(goopyPath);
 
 			// Flip the affected V3 characters

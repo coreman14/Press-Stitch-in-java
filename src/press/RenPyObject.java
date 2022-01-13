@@ -13,7 +13,7 @@ public class RenPyObject{
 	}	
     public RenPyObject clone()
     {
-    	RenPyObject s3 = new RenPyObject(lineNum, indent);
+		RenPyObject s3 = new RenPyObject(lineNum, indent);
 		s3.done = done;
 		s3.objType = objType;
 		return s3;
