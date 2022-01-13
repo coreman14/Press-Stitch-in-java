@@ -908,7 +908,7 @@ public class press_stitch {
 
 	@SuppressWarnings("unchecked")
 	public void main(String[] args) {
-		long startTime = System.nanoTime();
+		long startTime = System.currentTimeMillis();
 //		press_stitch_archive.extractRPATool(); // Decouple
 		boolean doClean = false;
 		boolean doEliza = true;
@@ -1105,7 +1105,7 @@ public class press_stitch {
 
 		// -----------------------------------------------------------------------------
 		// Hook to call main
-		System.out.println(System.nanoTime() - startTime);
+		System.out.println((System.currentTimeMillis() - startTime)/1000.00);
 
 		System.out.print("Completed Stitching, Press any key to exit: ");
 		try {
