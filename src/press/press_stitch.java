@@ -593,9 +593,6 @@ public class press_stitch {
 
 	public String processShow(RenPyFile rpFile, RenPyThread thread, int lineNum) {
 		String line = rpFile.lines.get(lineNum);
-		if (line.equals("show karynd with dissolve:")) {
-			System.out.println("UWU");
-		}
 		
 		String[] fields = RenPyFile.trimStringByString(line.strip(), ":").strip().trim().split("\\s+");
 		
@@ -683,9 +680,11 @@ public class press_stitch {
 
 		// i = 1;
 		// while i < len(swappedFields):
+		
 
 		boolean filenameMode = true;
 		boolean baseMode = true;
+		String debug_string = "";
 		StringBuilder exFile = new StringBuilder(swappedCharName + "_ex");
 		StringBuilder modifiers = new StringBuilder();
 		StringBuilder base = new StringBuilder();
@@ -720,7 +719,10 @@ public class press_stitch {
 			// to do
 			return line;
 		}
-
+		debug_string = exFile.toString();
+		if (line.contains("show karynd 1 at left") && swappedCharName.equals("karyn")) {
+			System.out.println("UWU");
+		}
 		String mappedFile = "";
 		boolean hasMapped = false;
 		if (swappedCharName != null && rpFile.charMap.containsKey(swappedCharName)) {
