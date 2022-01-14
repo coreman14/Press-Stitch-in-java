@@ -697,7 +697,7 @@ public class press_stitch {
 			}
 			i = i + 1;
 		}
-		if (exFile.toString().equals(swappedCharName + "_ex")) {
+		if (exFile.toString().equals(swappedCharName + "_ex") || exFile.toString().equals(swappedCharName + "_ex_full")) {
 			// It's something like "show candice with dissolve", with no fields so nothing
 			// to do
 			return line;
