@@ -918,7 +918,6 @@ public class press_stitch {
 		boolean doScan = true;
 		boolean doV6 = false;
 		boolean verbose = false;
-		boolean threadClean = false;
 
 		if (args.length > 0) {
 			for (String arg : args) {
@@ -930,7 +929,6 @@ public class press_stitch {
 					case "--nogoopy" -> doGoopy = false;
 					case "--noscan" -> doScan = false;
 					case "--verbose", "-v" -> verbose = true;
-					case "--threadclean" -> threadClean = true;
 					case "--v6" -> {
 						doV6 = true;
 						doCiel = false; // Cielpath disabled for 0.6
@@ -948,10 +946,6 @@ public class press_stitch {
 			removeDir(filename_05);
 			removeDir("Extracted");
 			System.exit(0);
-		}
-		if (threadClean) {
-			removeDir(Paths.get(filename_05, "Game", "Story").toString());
-			new File(Paths.get(filename_05, "Game", "Story").toString()).mkdirs();
 		}
 		
 		// Normal run
