@@ -895,8 +895,7 @@ public class press_stitch {
 		boolean doScan = true;
 		boolean doV6 = false;
 		boolean verbose = false;
-		boolean threadclean = false;
-		
+
 		
 		if (args.length > 0) {
 			for (String arg : args) {
@@ -908,7 +907,6 @@ public class press_stitch {
 					case "--nogoopy" -> doGoopy = false;
 					case "--noscan" -> doScan = false;
 					case "--verbose", "-v" -> verbose = true;
-					case "--threadclean" -> threadclean = true;
 					case "--v6" -> {
 						doV6 = true;
 						doCiel = false; // Cielpath disabled for 0.6
